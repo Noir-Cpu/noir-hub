@@ -1,0 +1,4 @@
+---
+const { status } = Astro.props as { status: string };
+---
+<span class="status" data-status={status}><i aria-hidden="true"></i>{status}</span>

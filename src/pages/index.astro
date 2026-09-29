@@ -1,0 +1,94 @@
+---
+import Base from "../layouts/Base.astro";
+import Status from "../components/Status.astro";
+import { loadHub } from "../lib/hub";
+import { STATUS_NOTE } from "../data/cases";
+
+const hub = await loadHub();
+const site = Astro.site!.href.replace(/\/$/, "");
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "John Balogun",
+  alternateName: "John Balogun, NOIR",
+  url: site,
+  sameAs: ["https://github.com/Noir-Cpu"],
+  jobTitle: "Software engineer",
+  description: "Software engineer building four public case files under the NOIR name.",
+};
+---
+<Base
+  title="John Balogun, NOIR: software case files"
+  description="John Balogun's portfolio: four public software case files under the NOIR name, each with an honest status and evidence, or a note that none exists yet."
+  jsonLd={jsonLd}
+>
+  <div class="frame">
+    <section class="hero" aria-labelledby="name">
+      <div class="strip">
+        <p class="label">File 000 / NOIR</p>
+        <p class="label">Case index, REV 0.1</p>
+      </div>
+      <h1 id="name"><span>John</span> <span>Balogun</span></h1>
+      <p class="lede">
+        I build software in public and keep the receipts. NOIR is the frame: four case files, each with a brief, a status
+        and the evidence behind it. Where there is no evidence yet, the page says so.
+      </p>
+      <span class="rule-signal" aria-hidden="true"></span>
+    </section>
+
+    <section class="band" id="cases" aria-labelledby="cases-h">
+      <p class="label">Case index</p>
+      <h2 id="cases-h" class="sr-only">Cases</h2>
+      <ol class="index">
+        {hub.cases.map((c) => (
+          <li class="row">
+            <span class="badge">[ {c.number} ]</span>
+            <Status status={c.status} />
+            <h3><a href={`/cases/${c.slug}`}>{c.codename}</a></h3>
+            <p><strong>{c.title}.</strong> {c.verdict}</p>
+            <span class="go" aria-hidden="true">{STATUS_NOTE[c.status] ?? ""} Open file</span>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section class="band" aria-labelledby="how-h">
+      <div class="split">
+        <div>
+          <p class="label">Method</p>
+          <h2 id="how-h">Evidence, not claims</h2>
+        </div>
+        <div class="prose">
+          <p>
+            Each case lives in its own public repository with a <code class="mono">noir.json</code> manifest. This site
+            reads those manifests and the GitHub API when it is built, and is rebuilt every day. Status, CI result,
+            last commit and release come from the repositories, not from me typing them here.
+          </p>
+          <p>
+            <a href="/status">See exactly what the last build could and could not read.</a>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" id="about" aria-labelledby="about-h">
+      <div class="split">
+        <div>
+          <p class="label">About and contact</p>
+          <h2 id="about-h">John Balogun</h2>
+        </div>
+        <div class="prose">
+          <p>
+            I am a software engineer. The NOIR name is a frame for this portfolio, not a replacement for my own: NOIR
+            on its own is a film genre and a lot of brands, so it always appears next to my name.
+          </p>
+          <p>The fastest way to reach me today is through GitHub. The code is public; the work can be checked.</p>
+          <ul class="linkrow">
+            <li><a href="https://github.com/Noir-Cpu">GitHub profile <span aria-hidden="true">&rarr;</span></a></li>
+            <li><a href="https://github.com/Noir-Cpu/noir-hub">Source of this site <span aria-hidden="true">&rarr;</span></a></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </div>
+</Base>

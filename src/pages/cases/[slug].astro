@@ -1,0 +1,116 @@
+---
+import Base from "../../layouts/Base.astro";
+import Status from "../../components/Status.astro";
+import { STATUS_NOTE } from "../../data/cases";
+import { fmtDate, loadHub, type CaseView } from "../../lib/hub";
+
+export async function getStaticPaths() {
+  const hub = await loadHub();
+  return hub.cases.map((c) => ({ params: { slug: c.slug }, props: { c } }));
+}
+const { c } = Astro.props as { c: CaseView };
+const f = c.facts;
+const ciWord: Record<string, string> = { success: "passing", failure: "failing", cancelled: "cancelled", timed_out: "timed out" };
+const links = [
+  f.url && { label: "Repository", href: f.url },
+  c.liveUrl && { label: "Live", href: c.liveUrl },
+  ...Object.entries(c.links).map(([k, v]) => ({ label: k, href: v })),
+].filter(Boolean) as { label: string; href: string }[];
+---
+<Base
+  title={`Case ${c.number} / ${c.codename}`}
+  description={`Case ${c.number} / ${c.codename} by John Balogun: ${c.title.toLowerCase()}. Status: ${c.status}.`}
+  image={`/og/${c.slug}.png`}
+>
+  <div class="frame">
+    <section class="casehead" aria-labelledby="t">
+      <p class="crumb mono"><a href="/#cases">&larr; Case index</a></p>
+      <div class="strip">
+        <span class="badge">[ {c.number} ]</span>
+        <Status status={c.status} />
+      </div>
+      <h1 id="t">{c.codename}</h1>
+      <p class="lede">{c.title}. {c.verdict}</p>
+    </section>
+
+    <section class="band" aria-labelledby="brief-h">
+      <div class="split">
+        <div>
+          <p class="label">The brief</p>
+          <h2 id="brief-h">Brief</h2>
+        </div>
+        <div class="prose">
+          {c.brief.map((p) => <p>{p}</p>)}
+          <p class="muted"><strong>Skills this case exercises:</strong> {c.lens}.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" aria-labelledby="status-h">
+      <div class="split">
+        <div>
+          <p class="label">Status and links</p>
+          <h2 id="status-h">Status</h2>
+        </div>
+        <div class="prose">
+          <p><Status status={c.status} /> <span class="muted">{STATUS_NOTE[c.status] ?? ""}</span></p>
+          {f.state === "missing" && <p class="muted">No repository exists for this case yet.</p>}
+          {f.state === "unavailable" && <p class="muted">GitHub could not be reached at the last build ({f.reason}). Status shown is the default.</p>}
+          {links.length > 0 ? (
+            <ul class="linkrow">
+              {links.map((l) => <li><a href={l.href}>{l.label} <span aria-hidden="true">&rarr;</span></a></li>)}
+            </ul>
+          ) : (
+            <p class="muted">No repository or live URL to link to yet.</p>
+          )}
+          <h3 style="margin-top:2rem;margin-bottom:0.75rem">Stack</h3>
+          {c.stack.length > 0 ? (
+            <ul class="chips">{c.stack.map((s) => <li>{s}</li>)}</ul>
+          ) : (
+            <p class="muted">Stack not declared yet. It will appear when the repository publishes a manifest.</p>
+          )}
+        </div>
+      </div>
+    </section>
+
+    <section class="band" aria-labelledby="ev-h">
+      <div class="split">
+        <div>
+          <p class="label">Evidence</p>
+          <h2 id="ev-h">Evidence</h2>
+        </div>
+        <div class="panel">
+          <header><span class="label">Evidence panel</span><span class="label">Case {c.number}</span></header>
+          <dl class="facts">
+            <div>
+              <dt>CI on default branch</dt>
+              <dd>
+                {f.ci ? (
+                  <><a href={f.ci.url}>{ciWord[f.ci.conclusion ?? ""] ?? f.ci.conclusion ?? f.ci.status}</a> <span class="muted">({fmtDate(f.ci.at)})</span></>
+                ) : <span class="none">no evidence published yet</span>}
+              </dd>
+            </div>
+            <div>
+              <dt>Last commit</dt>
+              <dd>
+                {f.lastCommit ? (
+                  <><a href={f.lastCommit.url}>{f.lastCommit.sha}</a> <span class="muted">({fmtDate(f.lastCommit.date)})</span></>
+                ) : <span class="none">no evidence published yet</span>}
+              </dd>
+            </div>
+            <div>
+              <dt>Latest release</dt>
+              <dd>
+                {f.release ? (
+                  <><a href={f.release.url}>{f.release.tag}</a> <span class="muted">({fmtDate(f.release.at)})</span></>
+                ) : <span class="none">no release published yet</span>}
+              </dd>
+            </div>
+            <div><dt>Load test</dt><dd><span class="none">no evidence published yet</span></dd></div>
+            <div><dt>Uptime</dt><dd><span class="none">no evidence published yet</span></dd></div>
+          </dl>
+        </div>
+      </div>
+    </section>
+  </div>
+</Base>

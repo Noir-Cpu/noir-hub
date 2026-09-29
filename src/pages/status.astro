@@ -1,0 +1,50 @@
+---
+import Base from "../layouts/Base.astro";
+import Status from "../components/Status.astro";
+import { fmtDate, loadHub } from "../lib/hub";
+
+const hub = await loadHub();
+const stateWord = { ok: "read", missing: "no repository", unavailable: "unavailable" } as const;
+---
+<Base
+  title="Status"
+  description="What the last build of John Balogun's NOIR site could read from each case repository: manifest, CI, last commit and release."
+  image="/og/status.png"
+>
+  <div class="frame">
+    <section class="casehead" aria-labelledby="t">
+      <p class="crumb mono"><a href="/">&larr; Home</a></p>
+      <div class="strip"><span class="badge">[ 000 ]</span><span class="label">Build report</span></div>
+      <h1 id="t">Status</h1>
+      <p class="lede">
+        Built <time datetime={hub.builtAt}>{hub.builtAt.slice(0, 16).replace("T", " ")} UTC</time>. The site rebuilds
+        daily and on every push. Empty cells mean the source had nothing to report, not that a number was hidden.
+      </p>
+    </section>
+    <section class="band" aria-label="Repository facts">
+      <div class="table-wrap" tabindex="0" role="region" aria-label="Case status table, scrolls sideways on small screens">
+        <table>
+          <thead>
+            <tr><th scope="col">Case</th><th scope="col">Status</th><th scope="col">GitHub</th><th scope="col">Manifest</th><th scope="col">CI on main</th><th scope="col">Last commit</th><th scope="col">Release</th></tr>
+          </thead>
+          <tbody>
+            {hub.cases.map((c) => (
+              <tr>
+                <th scope="row"><a href={`/cases/${c.slug}`}>[ {c.number} ] {c.codename}</a></th>
+                <td><Status status={c.status} /></td>
+                <td>{stateWord[c.facts.state]}{c.facts.reason && c.facts.state !== "missing" ? ` (${c.facts.reason})` : ""}</td>
+                <td>{c.facts.manifest ? "noir.json read" : c.facts.manifestProblem ?? "n/a"}</td>
+                <td>{c.facts.ci ? (c.facts.ci.conclusion ?? c.facts.ci.status) : "none"}</td>
+                <td>{c.facts.lastCommit ? fmtDate(c.facts.lastCommit.date) : "none"}</td>
+                <td>{c.facts.release ? c.facts.release.tag : "none"}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="muted" style="margin-top:1rem">
+        GitHub API access at build: {hub.authenticated ? "authenticated" : "anonymous (lower rate limit)"}.
+      </p>
+    </section>
+  </div>
+</Base>

@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://noir-hub.noir-cpu.workers.dev/sitemap.xml
