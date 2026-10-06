@@ -1,0 +1,252 @@
+{
+  "generated_at": "2026-10-06T14:29:33.591Z",
+  "interval_minutes": 10,
+  "first_probe": "2026-10-06T14:29:32.973Z",
+  "sites": [
+    {
+      "id": "hub",
+      "name": "HUB (this site)",
+      "url": "https://noir-hub.noir-cpu.workers.dev/",
+      "last": {
+        "t": "2026-10-06T14:29:32.973Z",
+        "ok": true,
+        "status": 200,
+        "ms": 314
+      },
+      "windows": {
+        "24h": {
+          "since": "2026-10-06T14:29:32.973Z",
+          "full": false,
+          "probes": 1,
+          "ok": 1,
+          "availability": 1,
+          "expected": 1,
+          "gaps": 0,
+          "longest_gap_min": 0,
+          "p50_ms": 314,
+          "p95_ms": 314
+        },
+        "7d": {
+          "since": "2026-10-06T14:29:32.973Z",
+          "full": false,
+          "probes": 1,
+          "ok": 1,
+          "availability": 1,
+          "expected": 1,
+          "gaps": 0,
+          "longest_gap_min": 0,
+          "p50_ms": 314,
+          "p95_ms": 314
+        },
+        "30d": {
+          "since": "2026-10-06T14:29:32.973Z",
+          "full": false,
+          "probes": 1,
+          "ok": 1,
+          "availability": 1,
+          "expected": 1,
+          "gaps": 0,
+          "longest_gap_min": 0,
+          "p50_ms": 314,
+          "p95_ms": 314
+        }
+      }
+    },
+    {
+      "id": "informant",
+      "name": "INFORMANT",
+      "url": "https://noir-informant.noir-cpu.workers.dev/",
+      "last": {
+        "t": "2026-10-06T14:29:33.020Z",
+        "ok": true,
+        "status": 200,
+        "ms": 193
+      },
+      "windows": {
+        "24h": {
+          "since": "2026-10-06T14:29:33.020Z",
+          "full": false,
+          "probes": 1,
+          "ok": 1,
+          "availability": 1,
+          "expected": 1,
+          "gaps": 0,
+          "longest_gap_min": 0,
+          "p50_ms": 193,
+          "p95_ms": 193
+        },
+        "7d": {
+          "since": "2026-10-06T14:29:33.020Z",
+          "full": false,
+          "probes": 1,
+          "ok": 1,
+          "availability": 1,
+          "expected": 1,
+          "gaps": 0,
+          "longest_gap_min": 0,
+          "p50_ms": 193,
+          "p95_ms": 193
+        },
+        "30d": {
+          "since": "2026-10-06T14:29:33.020Z",
+          "full": false,
+          "probes": 1,
+          "ok": 1,
+          "availability": 1,
+          "expected": 1,
+          "gaps": 0,
+          "longest_gap_min": 0,
+          "p50_ms": 193,
+          "p95_ms": 193
+        }
+      }
+    },
+    {
+      "id": "wiretap",
+      "name": "WIRETAP",
+      "url": "https://noir-wiretap.noir-cpu.workers.dev/",
+      "last": {
+        "t": "2026-10-06T14:29:33.021Z",
+        "ok": true,
+        "status": 200,
+        "ms": 185
+      },
+      "windows": {
+        "24h": {
+          "since": "2026-10-06T14:29:33.021Z",
+          "full": false,
+          "probes": 1,
+          "ok": 1,
+          "availability": 1,
+          "expected": 1,
+          "gaps": 0,
+          "longest_gap_min": 0,
+          "p50_ms": 185,
+          "p95_ms": 185
+        },
+        "7d": {
+          "since": "2026-10-06T14:29:33.021Z",
+          "full": false,
+          "probes": 1,
+          "ok": 1,
+          "availability": 1,
+          "expected": 1,
+          "gaps": 0,
+          "longest_gap_min": 0,
+          "p50_ms": 185,
+          "p95_ms": 185
+        },
+        "30d": {
+          "since": "2026-10-06T14:29:33.021Z",
+          "full": false,
+          "probes": 1,
+          "ok": 1,
+          "availability": 1,
+          "expected": 1,
+          "gaps": 0,
+          "longest_gap_min": 0,
+          "p50_ms": 185,
+          "p95_ms": 185
+        }
+      }
+    },
+    {
+      "id": "witness",
+      "name": "WITNESS API",
+      "url": "https://noir-witness.noir-cpu.workers.dev/api/health",
+      "last": {
+        "t": "2026-10-06T14:29:33.022Z",
+        "ok": true,
+        "status": 200,
+        "ms": 567
+      },
+      "windows": {
+        "24h": {
+          "since": "2026-10-06T14:29:33.022Z",
+          "full": false,
+          "probes": 1,
+          "ok": 1,
+          "availability": 1,
+          "expected": 1,
+          "gaps": 0,
+          "longest_gap_min": 0,
+          "p50_ms": 567,
+          "p95_ms": 567
+        },
+        "7d": {
+          "since": "2026-10-06T14:29:33.022Z",
+          "full": false,
+          "probes": 1,
+          "ok": 1,
+          "availability": 1,
+          "expected": 1,
+          "gaps": 0,
+          "longest_gap_min": 0,
+          "p50_ms": 567,
+          "p95_ms": 567
+        },
+        "30d": {
+          "since": "2026-10-06T14:29:33.022Z",
+          "full": false,
+          "probes": 1,
+          "ok": 1,
+          "availability": 1,
+          "expected": 1,
+          "gaps": 0,
+          "longest_gap_min": 0,
+          "p50_ms": 567,
+          "p95_ms": 567
+        }
+      }
+    },
+    {
+      "id": "dispatch",
+      "name": "DISPATCH API",
+      "url": "https://noir-dispatch-api.noir-cpu.workers.dev/api/health",
+      "last": {
+        "t": "2026-10-06T14:29:33.023Z",
+        "ok": true,
+        "status": 200,
+        "ms": 567
+      },
+      "windows": {
+        "24h": {
+          "since": "2026-10-06T14:29:33.023Z",
+          "full": false,
+          "probes": 1,
+          "ok": 1,
+          "availability": 1,
+          "expected": 1,
+          "gaps": 0,
+          "longest_gap_min": 0,
+          "p50_ms": 567,
+          "p95_ms": 567
+        },
+        "7d": {
+          "since": "2026-10-06T14:29:33.023Z",
+          "full": false,
+          "probes": 1,
+          "ok": 1,
+          "availability": 1,
+          "expected": 1,
+          "gaps": 0,
+          "longest_gap_min": 0,
+          "p50_ms": 567,
+          "p95_ms": 567
+        },
+        "30d": {
+          "since": "2026-10-06T14:29:33.023Z",
+          "full": false,
+          "probes": 1,
+          "ok": 1,
+          "availability": 1,
+          "expected": 1,
+          "gaps": 0,
+          "longest_gap_min": 0,
+          "p50_ms": 567,
+          "p95_ms": 567
+        }
+      }
+    }
+  ]
+}
