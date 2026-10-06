@@ -21,6 +21,12 @@ gh secret set CLOUDFLARE_ACCOUNT_ID --repo Noir-Cpu/noir-hub
 
 The workflow uses the built-in `GITHUB_TOKEN` to read the case repositories, which raises the GitHub API limit to 1,000 requests per hour per repository. No secret is needed for that.
 
+## Uptime probe
+
+`.github/workflows/probe.yml` needs no secrets. It uses the workflow's own `GITHUB_TOKEN` (permission `contents: write`) to push to the `status` branch, which it creates on first run. Scheduled workflows only run from the default branch, so the probe starts after the pull request that adds it is merged; start it at once with `gh workflow run Probe --repo Noir-Cpu/noir-hub`. Results: `https://raw.githubusercontent.com/Noir-Cpu/noir-hub/status/summary.json`. Design and limits: [ADR 0005](adr/0005-uptime-probe.md).
+
+If you add a branch-protection rule or ruleset for all branches, exclude `status`, or the probe cannot push. To try the probe locally without pushing: `node scripts/probe.mjs /some/empty/dir`.
+
 ## Custom domain
 
-The site is served from `https://noir-hub.noir-cpu.workers.dev`. If you attach a domain, change `site` in `astro.config.mjs` and the `Sitemap:` line in `public/robots.txt`, then redeploy.
+The site is served from `https://noir-hub.noir-cpu.workers.dev`. If you attach a domain, change `site` in `astro.config.mjs` and the `Sitemap:` line in `public/robots.txt`, then redeploy. Also update the canonical host in the `url` of the Person JSON-LD (`src/pages/index.astro`), which reads `Astro.site`, and the expected host in `tests/build.test.ts`.

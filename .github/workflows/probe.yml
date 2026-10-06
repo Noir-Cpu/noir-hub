@@ -1,0 +1,33 @@
+name: Probe
+# Uptime probe: one GET per site every 10 minutes, results stored on the orphan `status` branch.
+# Never commits to main. A failing site is recorded as data; the job only fails if it cannot store the result.
+# See docs/adr/0005-uptime-probe.md for the design and its limits.
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+  pull_request:
+    # Dry run on changes to the probe itself: probes once, prints the summary, pushes nothing.
+    paths:
+      - ".github/workflows/probe.yml"
+      - "scripts/probe.mjs"
+      - "scripts/publish-status.sh"
+      - "scripts/probe-sites.json"
+      - "scripts/lib/**"
+permissions:
+  contents: write
+concurrency:
+  group: probe
+  cancel-in-progress: false
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with: { node-version: 22 }
+      - name: Probe and store
+        env:
+          PUBLISH: ${{ github.event_name == 'pull_request' && '0' || '1' }}
+        run: bash scripts/publish-status.sh
