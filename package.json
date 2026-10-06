@@ -23,16 +23,16 @@
     "@fontsource/ibm-plex-sans": "^5.3.0",
     "@resvg/resvg-js": "^2.6.2",
     "astro": "^7.3.5",
-    "satori": "^0.33.5"
+    "satori": "^0.35.0"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
     "@axe-core/playwright": "^4.13.0",
     "@playwright/test": "^1.63.0",
-    "@types/node": "^26.6.3",
+    "@types/node": "^26.6.4",
     "lighthouse": "^13.5.0",
     "typescript": "^6.0.3",
-    "vitest": "^5.0.2",
-    "wrangler": "^4.143.1"
+    "vitest": "^5.0.3",
+    "wrangler": "^4.147.0"
   }
 }
