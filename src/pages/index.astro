@@ -3,42 +3,88 @@ import Base from "../layouts/Base.astro";
 import Status from "../components/Status.astro";
 import { loadHub } from "../lib/hub";
 import { STATUS_NOTE } from "../data/cases";
+import { ABOUT, CERTIFICATIONS, EXPERIENCE, LOOKING_FOR, NOW, ONE_LINER, PERSON, PROJECTS, RESEARCH, SKILLS } from "../data/profile";
 
 const hub = await loadHub();
 const site = Astro.site!.href.replace(/\/$/, "");
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",
-  name: "John Balogun",
+  "@id": `${site}/#john-balogun`,
+  name: PERSON.name,
   alternateName: "John Balogun, NOIR",
   url: site,
-  sameAs: ["https://github.com/Noir-Cpu"],
-  jobTitle: "Software engineer",
-  description: "Software engineer building four public case files under the NOIR name.",
+  email: `mailto:${PERSON.email}`,
+  jobTitle: PERSON.jobTitle,
+  description: ONE_LINER,
+  image: `${site}/og/home.png`,
+  homeLocation: { "@type": "Place", name: PERSON.place },
+  alumniOf: { "@type": "CollegeOrUniversity", name: PERSON.university, url: PERSON.universityUrl },
+  affiliation: { "@type": "CollegeOrUniversity", name: PERSON.university, url: PERSON.universityUrl },
+  knowsAbout: RESEARCH,
+  sameAs: [PERSON.github, PERSON.linkedin],
 };
+const mail = `mailto:${PERSON.email}`;
 ---
 <Base
-  title="John Balogun, NOIR: software case files"
-  description="John Balogun's portfolio: four public software case files under the NOIR name, each with an honest status and evidence, or a note that none exists yet."
+  title="John Balogun, NOIR | Computer Science Honours student"
+  description="John Balogun is a Computer Science Honours student at Stellenbosch University. Projects, teaching, research interests and how to email him."
+  ogType="profile"
   jsonLd={jsonLd}
 >
   <div class="frame">
     <section class="hero" aria-labelledby="name">
       <div class="strip">
-        <p class="label">File 000 / NOIR</p>
-        <p class="label">Case index, REV 0.1</p>
+        <p class="label">{PERSON.place}</p>
+        <p class="label">Computer Science Honours, expected Nov 2026</p>
       </div>
       <h1 id="name"><span>John</span> <span>Balogun</span></h1>
-      <p class="lede">
-        I build software in public and keep the receipts. NOIR is the frame: four case files, each with a brief, a status
-        and the evidence behind it. Where there is no evidence yet, the page says so.
+      <p class="lede">{ONE_LINER}</p>
+      <p class="cta-row">
+        <a class="cta" href={mail}><span class="cta-label">Email me</span><span class="cta-addr">{PERSON.email}</span></a>
       </p>
+      <ul class="linkrow">
+        <li><a href={PERSON.linkedin} rel="me">LinkedIn <span aria-hidden="true">&rarr;</span></a></li>
+        <li><a href={PERSON.github} rel="me">GitHub <span aria-hidden="true">&rarr;</span></a></li>
+      </ul>
       <span class="rule-signal" aria-hidden="true"></span>
     </section>
 
-    <section class="band" id="cases" aria-labelledby="cases-h">
-      <p class="label">Case index</p>
-      <h2 id="cases-h" class="sr-only">Cases</h2>
+    <section class="band" id="about" aria-labelledby="about-h">
+      <div class="split">
+        <div>
+          <p class="label">About</p>
+          <h2 id="about-h">About</h2>
+        </div>
+        <div class="prose">
+          {ABOUT.map((p) => <p>{p}</p>)}
+          <p class="looking"><strong>What I am looking for.</strong> {LOOKING_FOR} <a href={mail}>Email is the best way to reach me.</a></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" id="now" aria-labelledby="now-h">
+      <p class="label">Now</p>
+      <h2 id="now-h" class="sr-only">Now</h2>
+      <ol class="now">
+        {NOW.map((n, i) => (
+          <li>
+            <span class="badge">0{i + 1}</span>
+            <h3>{n.title}</h3>
+            <p>{n.text}</p>
+            {n.href && <p><a href={n.href}>{n.link} <span aria-hidden="true">&darr;</span></a></p>}
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section class="band" id="projects" aria-labelledby="projects-h">
+      <p class="label">Projects</p>
+      <h2 id="projects-h">Projects</h2>
+      <p class="intro">
+        The four NOIR cases are public case files. Each one links to its repository, and its status is read from that
+        repository when this site is built. Where a case has no evidence yet, the page says so.
+      </p>
       <ol class="index">
         {hub.cases.map((c) => (
           <li class="row">
@@ -50,42 +96,80 @@ const jsonLd = {
           </li>
         ))}
       </ol>
+
+      <h3 class="subhead" id="academic-h">Academic and other projects</h3>
+      <ul class="projects" aria-labelledby="academic-h">
+        {PROJECTS.map((p) => (
+          <li>
+            <p class="p-name">{p.name}</p>
+            <p class="p-meta mono">{p.meta}</p>
+            <p class="p-text">{p.text}</p>
+          </li>
+        ))}
+      </ul>
     </section>
 
-    <section class="band" aria-labelledby="how-h">
+    <section class="band" id="teaching" aria-labelledby="teaching-h">
+      <p class="label">Teaching and work</p>
+      <h2 id="teaching-h">Teaching and work</h2>
+      <ol class="entries">
+        {EXPERIENCE.map((e) => (
+          <li>
+            <p class="e-dates mono">{e.dates}</p>
+            <div class="prose">
+              <h3>{e.role}</h3>
+              <p class="e-org">{e.org}</p>
+              {e.text.map((t) => <p>{t}</p>)}
+            </div>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section class="band" id="skills" aria-labelledby="skills-h">
+      <p class="label">Skills</p>
+      <h2 id="skills-h">Skills</h2>
+      <dl class="skills">
+        {SKILLS.map((s) => (
+          <div>
+            <dt>{s.group}</dt>
+            <dd><ul class="chips">{s.items.map((i) => <li>{i}</li>)}</ul></dd>
+          </div>
+        ))}
+        <div>
+          <dt>Certifications</dt>
+          <dd><ul class="chips">{CERTIFICATIONS.map((i) => <li>{i}</li>)}</ul></dd>
+        </div>
+      </dl>
+    </section>
+
+    <section class="band" id="research" aria-labelledby="research-h">
       <div class="split">
         <div>
-          <p class="label">Method</p>
-          <h2 id="how-h">Evidence, not claims</h2>
+          <p class="label">Research interests</p>
+          <h2 id="research-h">Research interests</h2>
         </div>
-        <div class="prose">
-          <p>
-            Each case lives in its own public repository with a <code class="mono">noir.json</code> manifest. This site
-            reads those manifests and the GitHub API when it is built, and is rebuilt every day. Status, CI result,
-            last commit and release come from the repositories, not from me typing them here.
-          </p>
-          <p>
-            <a href="/status">See exactly what the last build could and could not read.</a>
-          </p>
-        </div>
+        <ul class="interests">
+          {RESEARCH.map((r) => <li>{r}</li>)}
+        </ul>
       </div>
     </section>
 
-    <section class="band" id="about" aria-labelledby="about-h">
+    <section class="band" id="contact" aria-labelledby="contact-h">
       <div class="split">
         <div>
-          <p class="label">About and contact</p>
-          <h2 id="about-h">John Balogun</h2>
+          <p class="label">Contact</p>
+          <h2 id="contact-h">Contact</h2>
         </div>
         <div class="prose">
-          <p>
-            I am a software engineer. The NOIR name is a frame for this portfolio, not a replacement for my own: NOIR
-            on its own is a film genre and a lot of brands, so it always appears next to my name.
+          <p>Email is the fastest way to reach me. I am in {PERSON.place}.</p>
+          <p class="cta-row">
+            <a class="cta" href={mail}><span class="cta-label">Email me</span><span class="cta-addr">{PERSON.email}</span></a>
           </p>
-          <p>The fastest way to reach me today is through GitHub. The code is public; the work can be checked.</p>
           <ul class="linkrow">
-            <li><a href="https://github.com/Noir-Cpu">GitHub profile <span aria-hidden="true">&rarr;</span></a></li>
-            <li><a href="https://github.com/Noir-Cpu/noir-hub">Source of this site <span aria-hidden="true">&rarr;</span></a></li>
+            <li><a href={PERSON.linkedin} rel="me">LinkedIn <span aria-hidden="true">&rarr;</span></a></li>
+            <li><a href={PERSON.github} rel="me">GitHub <span aria-hidden="true">&rarr;</span></a></li>
+            <li><a href={PERSON.repo}>Source of this site <span aria-hidden="true">&rarr;</span></a></li>
           </ul>
         </div>
       </div>

@@ -3,6 +3,8 @@ import Base from "../../layouts/Base.astro";
 import Status from "../../components/Status.astro";
 import { STATUS_NOTE } from "../../data/cases";
 import { fmtDate, loadHub, type CaseView } from "../../lib/hub";
+import { loadUptime } from "../../lib/uptime";
+import { esc, fmtAvailability } from "../../lib/uptime-view";
 
 export async function getStaticPaths() {
   const hub = await loadHub();
@@ -10,6 +12,13 @@ export async function getStaticPaths() {
 }
 const { c } = Astro.props as { c: CaseView };
 const f = c.facts;
+// The probe checks one URL per case (the same slug); its results are shown only when it has recorded some.
+const probe = (await loadUptime()).summary?.sites.find((s) => s.id === c.slug);
+const w30 = probe?.windows["30d"];
+const uptimeHtml =
+  w30 && w30.probes > 0 && w30.since
+    ? `${esc(fmtAvailability(w30.ok, w30.probes))} of ${w30.probes} probes since ${esc(w30.since.slice(0, 10))} (up to 30 days). <a href="/status#uptime">Method and limits</a>`
+    : "";
 const ciWord: Record<string, string> = { success: "passing", failure: "failing", cancelled: "cancelled", timed_out: "timed out" };
 const links = [
   f.url && { label: "Repository", href: f.url },
@@ -19,8 +28,16 @@ const links = [
 ---
 <Base
   title={`Case ${c.number} / ${c.codename}`}
-  description={`Case ${c.number} / ${c.codename} by John Balogun: ${c.title.toLowerCase()}. Status: ${c.status}.`}
+  description={`Case ${c.number} / ${c.codename} by John Balogun. ${c.verdict}`}
   image={`/og/${c.slug}.png`}
+  jsonLd={{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "John Balogun", item: Astro.site!.href },
+      { "@type": "ListItem", position: 2, name: `${c.codename}, case ${c.number}`, item: new URL(`/cases/${c.slug}`, Astro.site).href },
+    ],
+  }}
 >
   <div class="frame">
     <section class="casehead" aria-labelledby="t">
@@ -107,7 +124,12 @@ const links = [
               </dd>
             </div>
             <div><dt>Load test</dt><dd><span class="none">no evidence published yet</span></dd></div>
-            <div><dt>Uptime</dt><dd><span class="none">no evidence published yet</span></dd></div>
+            <div>
+              <dt>Uptime</dt>
+              <dd>
+                {uptimeHtml ? <probe-data class="inline" set:html={uptimeHtml} /> : <span class="none">no evidence published yet</span>}
+              </dd>
+            </div>
           </dl>
         </div>
       </div>

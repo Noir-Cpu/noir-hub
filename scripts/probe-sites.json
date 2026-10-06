@@ -1,0 +1,7 @@
+[
+  { "id": "hub", "name": "HUB (this site)", "url": "https://noir-hub.noir-cpu.workers.dev/" },
+  { "id": "informant", "name": "INFORMANT", "url": "https://noir-informant.noir-cpu.workers.dev/" },
+  { "id": "wiretap", "name": "WIRETAP", "url": "https://noir-wiretap.noir-cpu.workers.dev/" },
+  { "id": "witness", "name": "WITNESS API", "url": "https://noir-witness.noir-cpu.workers.dev/api/health" },
+  { "id": "dispatch", "name": "DISPATCH API", "url": "https://noir-dispatch-api.noir-cpu.workers.dev/api/health" }
+]

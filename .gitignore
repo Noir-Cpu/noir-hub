@@ -10,3 +10,4 @@ playwright-report
 test-results
 lighthouse-report
 node_modules
+status-data

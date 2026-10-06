@@ -8,6 +8,7 @@ import "../styles/global.css";
 import archivoWdth from "@fontsource-variable/archivo/files/archivo-latin-wdth-normal.woff2?url";
 import plexSans from "@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-400-normal.woff2?url";
 import Mark from "../components/Mark.astro";
+import { PERSON } from "../data/profile";
 
 interface Props {
   title: string;
@@ -16,16 +17,18 @@ interface Props {
   image?: string;
   jsonLd?: object;
   noindex?: boolean;
+  ogType?: "website" | "profile";
 }
-const { title, description, image = "/og/home.png", jsonLd, noindex = false } = Astro.props;
+const { title, description, image = "/og/home.png", jsonLd, noindex = false, ogType = "website" } = Astro.props;
 const path = Astro.url.pathname;
 const canonical = new URL(path === "/" ? "/" : path.replace(/\/$/, ""), Astro.site).href;
 const fullTitle = title.includes("NOIR") ? title : `${title} | John Balogun, NOIR`;
 const imageUrl = new URL(image, Astro.site).href;
 const nav = [
-  { href: "/#cases", label: "Cases" },
+  { href: "/#projects", label: "Work" },
+  { href: "/#teaching", label: "Teaching" },
+  { href: "/#contact", label: "Contact" },
   { href: "/status", label: "Status" },
-  { href: "/#about", label: "About" },
 ];
 ---
 <!doctype html>
@@ -39,11 +42,19 @@ const nav = [
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preload" href={archivoWdth} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={plexSans} as="font" type="font/woff2" crossorigin />
+    <meta name="author" content="John Balogun" />
     <meta name="color-scheme" content="light dark" />
     <meta name="theme-color" content="#efebe2" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#110f0d" media="(prefers-color-scheme: dark)" />
     {noindex && <meta name="robots" content="noindex" />}
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
+    {ogType === "profile" && <meta property="profile:first_name" content="John" />}
+    {ogType === "profile" && <meta property="profile:last_name" content="Balogun" />}
+    <meta property="og:locale" content="en_ZA" />
+    <meta property="og:image:alt" content={`${fullTitle}: social card`} />
+    <meta name="twitter:image:alt" content={`${fullTitle}: social card`} />
+    <link rel="me" href={PERSON.github} />
+    <link rel="me" href={PERSON.linkedin} />
     <meta property="og:site_name" content="John Balogun, NOIR" />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
@@ -80,8 +91,9 @@ const nav = [
     <footer class="foot">
       <div class="frame">
         <p class="mono">John Balogun, NOIR</p>
-        <p class="mono muted">Evidence, not claims. Site REV 0.1</p>
-        <p class="mono"><a href="https://github.com/Noir-Cpu">github.com/Noir-Cpu</a></p>
+        <p class="mono addr"><a href={`mailto:${PERSON.email}`}>{PERSON.email}</a></p>
+        <p class="mono"><a href={PERSON.linkedin} rel="me">LinkedIn</a> <span aria-hidden="true">/</span> <a href={PERSON.github} rel="me">GitHub</a></p>
+        <p class="mono muted">Evidence, not claims. Site REV 0.2</p>
       </div>
     </footer>
   </body>

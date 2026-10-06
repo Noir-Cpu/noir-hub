@@ -2,26 +2,61 @@
 import Base from "../layouts/Base.astro";
 import Status from "../components/Status.astro";
 import { fmtDate, loadHub } from "../lib/hub";
+import { loadUptime } from "../lib/uptime";
+import { renderUptime, SUMMARY_URL } from "../lib/uptime-view";
+import sites from "../../scripts/probe-sites.json";
 
 const hub = await loadHub();
+const uptime = await loadUptime();
+const uptimeHtml = renderUptime(uptime.summary, new Date(hub.builtAt), uptime.reason);
 const stateWord = { ok: "read", missing: "no repository", unavailable: "unavailable" } as const;
 ---
 <Base
-  title="Status"
-  description="What the last build of John Balogun's NOIR site could read from each case repository: manifest, CI, last commit and release."
+  title="Status: uptime and build report"
+  description="Uptime of John Balogun's NOIR sites from a probe that runs every 10 minutes, and what the last build could read from each case repository."
   image="/og/status.png"
 >
   <div class="frame">
     <section class="casehead" aria-labelledby="t">
       <p class="crumb mono"><a href="/">&larr; Home</a></p>
-      <div class="strip"><span class="badge">[ 000 ]</span><span class="label">Build report</span></div>
+      <div class="strip"><span class="badge">[ 000 ]</span><span class="label">Uptime and build report</span></div>
       <h1 id="t">Status</h1>
       <p class="lede">
+        Two kinds of evidence: an uptime probe that checks {sites.length} sites every 10 minutes, and a report of what the last
+        build could read from each case repository.
+      </p>
+    </section>
+
+    <section class="band" id="uptime" aria-labelledby="uptime-h">
+      <p class="label">Uptime probe</p>
+      <h2 id="uptime-h">Uptime</h2>
+      <div class="prose how">
+        <p>
+          A GitHub Actions workflow sends one request to each of {sites.length} sites every 10 minutes and stores the result: up or
+          down, HTTP status and time to first response. A site counts as up when it answers with a 2xx status within
+          10 seconds.
+        </p>
+        <p>
+          <strong>Read the numbers with these limits in mind.</strong> Figures cover only the time the probe has actually
+          observed, so a 7 day or 30 day figure says &ldquo;since&rdquo; a date until that much time has passed. GitHub
+          can delay or skip scheduled runs, so there are gaps; a gap is shown as missing probes, not as downtime. The
+          probe runs from one place, GitHub&rsquo;s network, so it cannot see what a visitor in another country sees.
+          This is a record of checks, not a service-level agreement.
+        </p>
+      </div>
+      <probe-data id="uptime-data" data-src={SUMMARY_URL} data-generated={uptime.summary?.generated_at ?? ""} set:html={uptimeHtml} />
+      <p class="muted refresh" id="uptime-note" aria-live="polite">
+        Figures as read when this site was built, {hub.builtAt.slice(0, 16).replace("T", " ")} UTC.
+      </p>
+    </section>
+
+    <section class="band" id="build" aria-labelledby="build-h">
+      <p class="label">Build report</p>
+      <h2 id="build-h">Case repositories</h2>
+      <p class="intro">
         Built <time datetime={hub.builtAt}>{hub.builtAt.slice(0, 16).replace("T", " ")} UTC</time>. The site rebuilds
         daily and on every push. Empty cells mean the source had nothing to report, not that a number was hidden.
       </p>
-    </section>
-    <section class="band" aria-label="Repository facts">
       <div class="table-wrap" tabindex="0" role="region" aria-label="Case status table, scrolls sideways on small screens">
         <table>
           <thead>
@@ -48,3 +83,24 @@ const stateWord = { ok: "read", missing: "no repository", unavailable: "unavaila
     </section>
   </div>
 </Base>
+
+<script>
+  import { parseSummary, renderUptime, fmtUtc } from "../lib/uptime-view";
+
+  const root = document.getElementById("uptime-data");
+  const note = document.getElementById("uptime-note");
+  const src = root?.dataset.src;
+  if (root && note && src) {
+    fetch(src, { signal: AbortSignal.timeout(8000), headers: { accept: "application/json" } })
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`HTTP ${r.status}`))))
+      .then((raw) => {
+        const summary = parseSummary(raw);
+        if (!summary) throw new Error("unexpected shape");
+        root.innerHTML = renderUptime(summary, new Date());
+        note.textContent = `Refreshed from the status branch in your browser. Data generated ${fmtUtc(summary.generated_at)}.`;
+      })
+      .catch(() => {
+        note.textContent += " Could not refresh from the status branch just now, so these are the figures from that build.";
+      });
+  }
+</script>
