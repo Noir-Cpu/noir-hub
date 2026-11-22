@@ -403,3 +403,8 @@
 {"t":"2026-11-22T08:12:16.562Z","site":"wiretap","ok":true,"status":200,"ms":239}
 {"t":"2026-11-22T08:12:16.563Z","site":"witness","ok":true,"status":200,"ms":299}
 {"t":"2026-11-22T08:12:16.564Z","site":"dispatch","ok":true,"status":200,"ms":288}
+{"t":"2026-11-22T16:26:38.313Z","site":"hub","ok":true,"status":200,"ms":232}
+{"t":"2026-11-22T16:26:38.359Z","site":"informant","ok":true,"status":200,"ms":199}
+{"t":"2026-11-22T16:26:38.360Z","site":"wiretap","ok":true,"status":200,"ms":265}
+{"t":"2026-11-22T16:26:38.361Z","site":"witness","ok":true,"status":200,"ms":501}
+{"t":"2026-11-22T16:26:38.362Z","site":"dispatch","ok":true,"status":200,"ms":485}
