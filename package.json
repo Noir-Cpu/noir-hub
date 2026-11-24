@@ -22,7 +22,7 @@
     "@fontsource/ibm-plex-mono": "^5.3.0",
     "@fontsource/ibm-plex-sans": "^5.3.0",
     "@resvg/resvg-js": "^2.6.2",
-    "astro": "^7.4.12",
+    "astro": "^7.4.13",
     "satori": "^0.63.2"
   },
   "devDependencies": {
@@ -32,7 +32,7 @@
     "@types/node": "^26.6.6",
     "lighthouse": "^13.6.0",
     "typescript": "^6.0.3",
-    "vitest": "^5.1.0",
-    "wrangler": "^4.162.0"
+    "vitest": "^5.1.1",
+    "wrangler": "^4.166.0"
   }
 }
