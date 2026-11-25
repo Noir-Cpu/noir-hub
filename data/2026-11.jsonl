@@ -443,3 +443,8 @@
 {"t":"2026-11-25T02:40:17.943Z","site":"wiretap","ok":true,"status":200,"ms":381}
 {"t":"2026-11-25T02:40:17.944Z","site":"witness","ok":true,"status":200,"ms":537}
 {"t":"2026-11-25T02:40:17.945Z","site":"dispatch","ok":true,"status":200,"ms":578}
+{"t":"2026-11-25T11:47:52.154Z","site":"hub","ok":true,"status":200,"ms":367}
+{"t":"2026-11-25T11:47:52.331Z","site":"informant","ok":true,"status":200,"ms":301}
+{"t":"2026-11-25T11:47:52.333Z","site":"wiretap","ok":true,"status":200,"ms":292}
+{"t":"2026-11-25T11:47:52.334Z","site":"witness","ok":true,"status":200,"ms":419}
+{"t":"2026-11-25T11:47:52.335Z","site":"dispatch","ok":true,"status":200,"ms":413}
