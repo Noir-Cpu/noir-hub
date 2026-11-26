@@ -463,3 +463,8 @@
 {"t":"2026-11-26T12:52:58.497Z","site":"wiretap","ok":true,"status":200,"ms":281}
 {"t":"2026-11-26T12:52:58.497Z","site":"witness","ok":true,"status":200,"ms":499}
 {"t":"2026-11-26T12:52:58.498Z","site":"dispatch","ok":true,"status":200,"ms":404}
+{"t":"2026-11-26T22:13:01.410Z","site":"hub","ok":true,"status":200,"ms":230}
+{"t":"2026-11-26T22:13:01.488Z","site":"informant","ok":true,"status":200,"ms":185}
+{"t":"2026-11-26T22:13:01.489Z","site":"wiretap","ok":true,"status":200,"ms":189}
+{"t":"2026-11-26T22:13:01.490Z","site":"witness","ok":true,"status":200,"ms":468}
+{"t":"2026-11-26T22:13:01.491Z","site":"dispatch","ok":true,"status":200,"ms":308}
